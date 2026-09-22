@@ -2,33 +2,40 @@ import re
 
 
 def check_valid_email(searchstring):
-    """
-    Match emails.
-
-    :param searchstring: string
-    :return: string
-    """
-    pass
-
-
+    if (re.fullmatch(r'[a-zA-z]{1,10}\.[1-7]\d{2}[a-zA-z]*@(shield\.gov|starkindustries\.com)', searchstring) == None):
+        return "invalid"
+    else:
+        return "valid"
+    
 def extract_author_and_book_names(searchstring):
-    """
-    Extract author and book.
+    p = re.compile(r'([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)?) wrote (books|[A-Z0-9][A-Za-z0-9]*(?: [A-Z0-9][A-Za-z0-9]*){0,2})')
 
-    :param searchstring: string
-    :return: tuple
-    """
-    pass
+    match = p.search(searchstring)
+
+    if match == None:
+        return ("noauthor", "noname")
+    else:
+        return (match.group(1), match.group(2))
 
 
 def fix_adult_superhero_name(searchstring):
-    """
-    Replace Boy/Girl or boy/girl with Man/Woman or man/woman respectively.
+    p = re.compile(r'([A-Z][A-Za-z]*) (Boy|boy|Girl|girl)')
 
-    :param searchstring: string
-    :return: string
-    """
-    pass
+    m = p.search(searchstring)
+
+    if m == None:
+        return "nomatch"
+
+    if m.group(2) == "Boy":
+        rep = "Man"
+    elif m.group(2) == "boy":
+        rep = "man"
+    elif m.group(2) == "Girl":
+        rep = "Woman"
+    else:
+        rep = "woman"
+
+    return p.sub(m.group(1) + " " + rep, searchstring)
 
 
 if __name__ == '__main__':
